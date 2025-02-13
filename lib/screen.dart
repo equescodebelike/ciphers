@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'logic.dart';
 
-Logic logic = new Logic();
-String result;
+Logic logic = Logic();
+late String result;
 
 class Screen extends StatefulWidget {
-  final title;
+  final String title;
 
-  Screen({this.title});
+  Screen({required this.title});
 
   @override
   _ScreenState createState() => _ScreenState();
@@ -18,28 +18,23 @@ class _ScreenState extends State<Screen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      result = '';
-    });
+    result = '';
   }
 
-  inputFormattin() {
-    if (widget.title == 'CAESAR CIPHER' || widget.title == 'VIGENERE CIPHER')
-      return <TextInputFormatter>[
-        new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z ]"))
-      ];
+  List<TextInputFormatter> inputFormatting() {
+    if (widget.title == 'ШИФР ЦЕЗАРЯ' || widget.title == 'ШИФР ВИЖЕНЕРА') {
+      return [FilteringTextInputFormatter.allow(RegExp("[а-яА-ЯёЁ ]"))];
+    }
+    return [];
   }
 
-  keyFormattin() {
-    if (widget.title == 'CAESAR CIPHER' || widget.title == "RAIL FENCE CIPHER")
-      return <TextInputFormatter>[
-        new FilteringTextInputFormatter.allow(RegExp("[0-9]"))
-      ];
-    else if (widget.title == 'VIGENERE CIPHER' ||
-        widget.title == 'KEYWORD CIPHER')
-      return <TextInputFormatter>[
-        new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z ]"))
-      ];
+  List<TextInputFormatter> keyFormatting() {
+    if (widget.title == 'ШИФР ЦЕЗАРЯ' || widget.title == "ШИФР РЕШЕТКИ") {
+      return [FilteringTextInputFormatter.allow(RegExp("[0-9]"))];
+    } else if (widget.title == 'ШИФР ВИЖЕНЕРА' || widget.title == 'КЛЮЧЕВОЙ ШИФР') {
+      return [FilteringTextInputFormatter.allow(RegExp("[а-яА-ЯёЁ ]"))];
+    }
+    return [];
   }
 
   final formKey = GlobalKey<FormState>();
@@ -49,21 +44,22 @@ class _ScreenState extends State<Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: Text(
-            widget.title,
-            style: TextStyle(color: Colors.black),
-          ),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: Text(
+          widget.title,
+          style: TextStyle(color: Colors.black),
         ),
-        body: ListView(
-          children: [
-            Form(
-              key: formKey,
-              child: Column(children: [
+      ),
+      body: ListView(
+        children: [
+          Form(
+            key: formKey,
+            child: Column(
+              children: [
                 Padding(
                   padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.02,
@@ -72,16 +68,17 @@ class _ScreenState extends State<Screen> {
                   ),
                   child: TextFormField(
                     controller: input,
-                    inputFormatters: inputFormattin(),
+                    inputFormatters: inputFormatting(),
                     validator: (value) {
-                      if (value.isEmpty) return 'Required';
+                      if (value == null || value.isEmpty) return 'Обязательно';
                       return null;
                     },
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0))),
-                        hintText: 'Input'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      hintText: 'Ввод',
+                    ),
                   ),
                 ),
                 Padding(
@@ -92,109 +89,126 @@ class _ScreenState extends State<Screen> {
                   ),
                   child: TextFormField(
                     controller: key,
-                    inputFormatters: keyFormattin(),
+                    inputFormatters: keyFormatting(),
                     validator: (value) {
-                      if (value.isEmpty)
-                        return 'Required';
-                      else if (widget.title == 'RAIL FENCE CIPHER' &&
-                          int.parse(value) > input.text.length)
-                        return 'Number key should not be bigger than length of text.';
-                      else if (widget.title == 'PLAYFAIR CIPHER' &&
-                          key.text.length < 6)
-                        return 'Playfair key size must atleast be 6 characters long.';
+                      if (value == null || value.isEmpty) {
+                        return 'Обязательно';
+                      } else if (widget.title == 'ШИФР РЕШЕТКИ' &&
+                          int.parse(value) > input.text.length) {
+                        return 'Числовой ключ не должен быть больше длины текста.';
+                      } else if (widget.title == 'ШИФР ПЛЕЙФЕРА' &&
+                          key.text.length < 6) {
+                        return 'Длина ключа Плейфера должна быть не менее 6 символов.';
+                      }
                       return null;
                     },
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0))),
-                        hintText: 'Key'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      hintText: 'Ключ',
+                    ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.05),
+                    top: MediaQuery.of(context).size.height * 0.05,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      RaisedButton.icon(
+                      ElevatedButton.icon(
                         onPressed: () {
-                          if (formKey.currentState.validate())
+                          if (formKey.currentState!.validate()) {
                             setState(() {
-                              if (widget.title == "CAESAR CIPHER")
+                              if (widget.title == "ШИФР ЦЕЗАРЯ") {
                                 result = logic.caesar(
                                     input.text, int.parse(key.text), 1);
-                              else if (widget.title == "VIGENERE CIPHER")
+                              } else if (widget.title == "ШИФР ВИЖЕНЕРА") {
                                 result =
                                     logic.vigenere(input.text, key.text, 1);
-                              else if (widget.title == "RAIL FENCE CIPHER")
+                              } else if (widget.title == "ШИФР РЕШЕТКИ") {
                                 result = logic.railfenceEncrypt(
                                     input.text, int.parse(key.text));
-                              else if (widget.title == "PLAYFAIR CIPHER")
+                              } else if (widget.title == "ШИФР ПЛЕЙФЕРА") {
                                 result =
                                     logic.playfairEncrypt(input.text, key.text);
-                              else if (widget.title == "KEYWORD CIPHER")
+                              } else if (widget.title == "КЛЮЧЕВОЙ ШИФР") {
                                 result =
                                     logic.keywordEncrypt(input.text, key.text);
+                              }
                             });
+                          }
                         },
                         icon: Icon(Icons.lock_outline),
-                        label: Text('ENCRYPT'),
-                        color: Colors.green,
-                        textColor: Colors.white,
+                        label: Text('ЗАШИФРОВАТЬ'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.green,
+                        ),
                       ),
-                      RaisedButton.icon(
+                      ElevatedButton.icon(
                         onPressed: () {
-                          if (formKey.currentState.validate())
+                          if (formKey.currentState!.validate()) {
                             setState(() {
-                              if (widget.title == "CAESAR CIPHER")
+                              if (widget.title == "ШИФР ЦЕЗАРЯ") {
                                 result = logic.caesar(
                                     input.text, int.parse(key.text), 0);
-                              else if (widget.title == "VIGENERE CIPHER")
+                              } else if (widget.title == "ШИФР ВИЖЕНЕРА") {
                                 result =
                                     logic.vigenere(input.text, key.text, 0);
-                              else if (widget.title == "RAIL FENCE CIPHER")
+                              } else if (widget.title == "ШИФР РЕШЕТКИ") {
                                 result = logic.railfenceDecrypt(
                                     input.text, int.parse(key.text));
-                              else if (widget.title == "PLAYFAIR CIPHER")
+                              } else if (widget.title == "ШИФР ПЛЕЙФЕРА") {
                                 result =
                                     logic.playfairDecrypt(input.text, key.text);
-                              else if (widget.title == "KEYWORD CIPHER")
+                              } else if (widget.title == "КЛЮЧЕВОЙ ШИФР") {
                                 result =
                                     logic.keywordDecrypt(input.text, key.text);
+                              }
                             });
+                          }
                         },
                         icon: Icon(Icons.lock_open_rounded),
-                        label: Text('DECRYPT'),
-                        color: Colors.red,
-                        textColor: Colors.white,
-                      )
+                        label: Text('РАСШИФРОВАТЬ'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.red,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.05),
+                    top: MediaQuery.of(context).size.height * 0.05,
+                  ),
                   child: ListTile(
-                      title: Text(
-                    'OUTPUT',
-                    style: TextStyle(fontSize: 30),
-                    textAlign: TextAlign.center,
-                  )),
+                    title: Text(
+                      'ВЫВОД',
+                      style: TextStyle(fontSize: 30),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.02),
+                    top: MediaQuery.of(context).size.height * 0.02,
+                  ),
                   child: ListTile(
-                      title: Text(
-                    result,
-                    style: TextStyle(fontSize: 30),
-                    textAlign: TextAlign.center,
-                  )),
+                    title: Text(
+                      result,
+                      style: TextStyle(fontSize: 30),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
-              ]),
-            )
-          ],
-        ));
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

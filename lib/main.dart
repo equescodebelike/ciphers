@@ -13,7 +13,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
      debugShowCheckedModeBanner: false,
-     title: 'Ciphers',
+     title: 'Алгоритмы шифрования',
      home: Home(),
     );
   }
