@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'logic.dart';
 
 Logic logic = Logic();
@@ -31,7 +32,8 @@ class _ScreenState extends State<Screen> {
   List<TextInputFormatter> keyFormatting() {
     if (widget.title == 'ШИФР ЦЕЗАРЯ' || widget.title == "ШИФР РЕШЕТКИ") {
       return [FilteringTextInputFormatter.allow(RegExp("[0-9]"))];
-    } else if (widget.title == 'ШИФР ВИЖЕНЕРА' || widget.title == 'КЛЮЧЕВОЙ ШИФР') {
+    } else if (widget.title == 'ШИФР ВИЖЕНЕРА' ||
+        widget.title == 'КЛЮЧЕВОЙ ШИФР') {
       return [FilteringTextInputFormatter.allow(RegExp("[а-яА-ЯёЁ ]"))];
     }
     return [];
@@ -49,9 +51,35 @@ class _ScreenState extends State<Screen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: Text(
-          widget.title,
-          style: TextStyle(color: Colors.black),
+        title: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text(
+                        widget.title,
+                      ),
+                    ),
+                    body: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width / 2),
+                        child: SfPdfViewer.network(
+                          'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+          child: Text(
+            widget.title,
+            style: TextStyle(color: Colors.black),
+          ),
         ),
       ),
       body: ListView(

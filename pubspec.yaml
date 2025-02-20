@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
   url_launcher:
+  syncfusion_flutter_pdfviewer: ^28.2.6
 
 
 dev_dependencies:
