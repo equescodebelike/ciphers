@@ -30,14 +30,10 @@ class Logic {
     int j = 0;
     for (var i = 0; i < text.length; i++) {
       if (encrypt == 1) {
-        int x =
-            (text.codeUnitAt(i) + key.codeUnitAt(j) - 2 * 'а'.codeUnitAt(0)) %
-                    33 +
-                'а'.codeUnitAt(0);
+        int x = (text.codeUnitAt(i) + key.codeUnitAt(j) - 2 * 'а'.codeUnitAt(0)) % 33 + 'а'.codeUnitAt(0);
         result += String.fromCharCode(x);
       } else {
-        int y = ((text.codeUnitAt(i) - key.codeUnitAt(j)) % 33 + 33) % 33 +
-            'а'.codeUnitAt(0);
+        int y = ((text.codeUnitAt(i) - key.codeUnitAt(j)) % 33 + 33) % 33 + 'а'.codeUnitAt(0);
         result += String.fromCharCode(y);
       }
       if (j < key.length - 1)
@@ -82,8 +78,7 @@ class Logic {
 
     for (var i = 0; i < key; i++) {
       for (var j = 0; j < text.length; j++) {
-        if (matrix[i][j] == '*' && index < text.length)
-          matrix[i][j] = text[index++];
+        if (matrix[i][j] == '*' && index < text.length) matrix[i][j] = text[index++];
       }
     }
 
@@ -112,9 +107,7 @@ class Logic {
     key = key.toLowerCase();
 
     for (var i = 0; i < text.length - 1; i++) {
-      if (text[i] == text[i + 1])
-        text =
-            text.substring(0, i + 1) + 'х' + text.substring(i + 1, text.length);
+      if (text[i] == text[i + 1]) text = text.substring(0, i + 1) + 'х' + text.substring(i + 1, text.length);
     }
     if (text.length % 2 != 0) text += 'х';
 
@@ -127,13 +120,10 @@ class Logic {
     }
 
     for (var i = 'а'.codeUnitAt(0); i <= 'я'.codeUnitAt(0); i++) {
-      if (i != 'ё'.codeUnitAt(0) &&
-          table.contains(String.fromCharCode(i)) == false)
-        table += String.fromCharCode(i);
+      if (i != 'ё'.codeUnitAt(0) && table.contains(String.fromCharCode(i)) == false) table += String.fromCharCode(i);
     }
 
-    for (var i = 0; i < 5; i++)
-      for (var j = 0; j < 6; j++) matrix[i][j] = table[index++];
+    for (var i = 0; i < 5; i++) for (var j = 0; j < 6; j++) matrix[i][j] = table[index++];
 
     for (var i = 0; i < text.length; i += 2) {
       int row1 = 0, row2 = 0, col1 = 0, col2 = 0;
@@ -178,9 +168,7 @@ class Logic {
     }
 
     for (var i = 'а'.codeUnitAt(0); i <= 'я'.codeUnitAt(0); i++) {
-      if (i != 'ё'.codeUnitAt(0) &&
-          table.contains(String.fromCharCode(i)) == false)
-        table += String.fromCharCode(i);
+      if (i != 'ё'.codeUnitAt(0) && table.contains(String.fromCharCode(i)) == false) table += String.fromCharCode(i);
     }
 
     for (var i = 0; i < 5; i++) {
@@ -222,12 +210,10 @@ class Logic {
     key = key.toUpperCase();
     text = text.toUpperCase();
 
-    for (var i = 0; i < key.length; i++)
-      if (fullKey.contains(key[i]) == false && key[i] != ' ') fullKey += key[i];
+    for (var i = 0; i < key.length; i++) if (fullKey.contains(key[i]) == false && key[i] != ' ') fullKey += key[i];
 
     for (var i = 'А'.codeUnitAt(0); i <= 'Я'.codeUnitAt(0); i++)
-      if (fullKey.contains(String.fromCharCode(i)) == false)
-        fullKey += String.fromCharCode(i);
+      if (fullKey.contains(String.fromCharCode(i)) == false) fullKey += String.fromCharCode(i);
 
     for (var i = 0; i < text.length; i++) {
       if (text[i] == ' ')
@@ -251,15 +237,13 @@ class Logic {
           key[i].codeUnitAt(0) <= 'Я'.codeUnitAt(0)) fullKey += key[i];
 
     for (var i = 'А'.codeUnitAt(0); i <= 'Я'.codeUnitAt(0); i++)
-      if (fullKey.contains(String.fromCharCode(i)) == false)
-        fullKey += String.fromCharCode(i);
+      if (fullKey.contains(String.fromCharCode(i)) == false) fullKey += String.fromCharCode(i);
 
     for (var i = 0; i < text.length; i++) {
       if (text[i] == ' ')
         result += ' ';
       else {
-        result +=
-            String.fromCharCode(fullKey.indexOf(text[i]) + 'А'.codeUnitAt(0));
+        result += String.fromCharCode(fullKey.indexOf(text[i]) + 'А'.codeUnitAt(0));
       }
     }
 

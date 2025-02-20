@@ -1,3 +1,4 @@
+import 'package:cipher/tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -32,8 +33,7 @@ class _ScreenState extends State<Screen> {
   List<TextInputFormatter> keyFormatting() {
     if (widget.title == 'ШИФР ЦЕЗАРЯ' || widget.title == "ШИФР РЕШЕТКИ") {
       return [FilteringTextInputFormatter.allow(RegExp("[0-9]"))];
-    } else if (widget.title == 'ШИФР ВИЖЕНЕРА' ||
-        widget.title == 'КЛЮЧЕВОЙ ШИФР') {
+    } else if (widget.title == 'ШИФР ВИЖЕНЕРА' || widget.title == 'КЛЮЧЕВОЙ ШИФР') {
       return [FilteringTextInputFormatter.allow(RegExp("[а-яА-ЯёЁ ]"))];
     }
     return [];
@@ -51,34 +51,37 @@ class _ScreenState extends State<Screen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: Text(
-                        widget.title,
-                      ),
-                    ),
-                    body: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width / 2),
-                        child: SfPdfViewer.network(
-                          'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+        title: CustomTooltip(
+          maxWidth: 800,
+          message: 'Нажмите на название шифра,\nчтобы посмотреть подробную информацию',
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: Text(
+                          widget.title,
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-          child: Text(
-            widget.title,
-            style: TextStyle(color: Colors.black),
+                      body: Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+                          child: SfPdfViewer.network(
+                            'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+            child: Text(
+              widget.title,
+              style: TextStyle(color: Colors.black),
+            ),
           ),
         ),
       ),
@@ -121,11 +124,9 @@ class _ScreenState extends State<Screen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Обязательно';
-                      } else if (widget.title == 'ШИФР РЕШЕТКИ' &&
-                          int.parse(value) > input.text.length) {
+                      } else if (widget.title == 'ШИФР РЕШЕТКИ' && int.parse(value) > input.text.length) {
                         return 'Числовой ключ не должен быть больше длины текста.';
-                      } else if (widget.title == 'ШИФР ПЛЕЙФЕРА' &&
-                          key.text.length < 6) {
+                      } else if (widget.title == 'ШИФР ПЛЕЙФЕРА' && key.text.length < 6) {
                         return 'Длина ключа Плейфера должна быть не менее 6 символов.';
                       }
                       return null;
@@ -150,20 +151,15 @@ class _ScreenState extends State<Screen> {
                           if (formKey.currentState!.validate()) {
                             setState(() {
                               if (widget.title == "ШИФР ЦЕЗАРЯ") {
-                                result = logic.caesar(
-                                    input.text, int.parse(key.text), 1);
+                                result = logic.caesar(input.text, int.parse(key.text), 1);
                               } else if (widget.title == "ШИФР ВИЖЕНЕРА") {
-                                result =
-                                    logic.vigenere(input.text, key.text, 1);
+                                result = logic.vigenere(input.text, key.text, 1);
                               } else if (widget.title == "ШИФР РЕШЕТКИ") {
-                                result = logic.railfenceEncrypt(
-                                    input.text, int.parse(key.text));
+                                result = logic.railfenceEncrypt(input.text, int.parse(key.text));
                               } else if (widget.title == "ШИФР ПЛЕЙФЕРА") {
-                                result =
-                                    logic.playfairEncrypt(input.text, key.text);
+                                result = logic.playfairEncrypt(input.text, key.text);
                               } else if (widget.title == "КЛЮЧЕВОЙ ШИФР") {
-                                result =
-                                    logic.keywordEncrypt(input.text, key.text);
+                                result = logic.keywordEncrypt(input.text, key.text);
                               }
                             });
                           }
@@ -180,20 +176,15 @@ class _ScreenState extends State<Screen> {
                           if (formKey.currentState!.validate()) {
                             setState(() {
                               if (widget.title == "ШИФР ЦЕЗАРЯ") {
-                                result = logic.caesar(
-                                    input.text, int.parse(key.text), 0);
+                                result = logic.caesar(input.text, int.parse(key.text), 0);
                               } else if (widget.title == "ШИФР ВИЖЕНЕРА") {
-                                result =
-                                    logic.vigenere(input.text, key.text, 0);
+                                result = logic.vigenere(input.text, key.text, 0);
                               } else if (widget.title == "ШИФР РЕШЕТКИ") {
-                                result = logic.railfenceDecrypt(
-                                    input.text, int.parse(key.text));
+                                result = logic.railfenceDecrypt(input.text, int.parse(key.text));
                               } else if (widget.title == "ШИФР ПЛЕЙФЕРА") {
-                                result =
-                                    logic.playfairDecrypt(input.text, key.text);
+                                result = logic.playfairDecrypt(input.text, key.text);
                               } else if (widget.title == "КЛЮЧЕВОЙ ШИФР") {
-                                result =
-                                    logic.keywordDecrypt(input.text, key.text);
+                                result = logic.keywordDecrypt(input.text, key.text);
                               }
                             });
                           }
