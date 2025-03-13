@@ -1,22 +1,22 @@
-import 'package:cipher/tooltip.dart';
+import 'package:cipher/feature/widgets/tooltip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'logic.dart';
+import 'presenter/logic.dart';
 
 Logic logic = Logic();
 late String result;
 
-class Screen extends StatefulWidget {
+class Realization extends StatefulWidget {
   final String title;
 
-  Screen({required this.title});
+  Realization({required this.title});
 
   @override
-  _ScreenState createState() => _ScreenState();
+  _RealizationState createState() => _RealizationState();
 }
 
-class _ScreenState extends State<Screen> {
+class _RealizationState extends State<Realization> {
   @override
   void initState() {
     super.initState();

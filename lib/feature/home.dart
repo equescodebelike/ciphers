@@ -1,5 +1,6 @@
+import 'package:cipher/feature/choose.dart';
 import 'package:flutter/material.dart';
-import 'screen.dart';
+import 'realization.dart';
 
 final ciphers = [
   'ШИФР ЦЕЗАРЯ',
@@ -43,7 +44,7 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Screen(title: ciphers[index]),
+                    builder: (context) => Choose(title: ciphers[index]),
                   ),
                 );
               },
