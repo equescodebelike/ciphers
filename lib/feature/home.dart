@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Симметричные системы', style: TextStyle(color: Colors.black)),
+        title: Text('СИММЕТРИЧНЫЕ СИСТЕМЫ', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       body: ListView.builder(

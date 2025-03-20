@@ -3,8 +3,8 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'realization.dart';
 
 final ciphers = [
-  'РЕАЛИЗАЦИЯ АЛГОРИТМА',
-  'ПОДРОБНАЯ ИНФОРМАЦИЯ',
+  'ЗАШИФРОВАТЬ СООБЩЕНИЕ',
+  'СХЕМА И ПРИНЦИП РАБОТЫ',
   'КОД АЛГОРИТМА',
 ];
 
@@ -68,9 +68,7 @@ class _ChooseState extends State<Choose> {
                           body: Center(
                             child: ConstrainedBox(
                               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
-                              child: SfPdfViewer.network(
-                                'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
-                              ),
+                              child: PdfWidget(),
                             ),
                           ),
                         );
@@ -78,9 +76,7 @@ class _ChooseState extends State<Choose> {
                     ),
                   );
                 }
-                if (index == 2) {
-
-                }
+                if (index == 2) {}
               },
               leading: Icon(Icons.lock, color: Colors.black),
               title: Text(ciphers[index]),
@@ -89,5 +85,34 @@ class _ChooseState extends State<Choose> {
         },
       ),
     );
+  }
+
+  Widget PdfWidget() {
+    switch (widget.title) {
+      case 'ШИФР ЦЕЗАРЯ':
+        return SfPdfViewer.network(
+          'https://github.com/equescodebelike/ciphers/raw/refs/heads/master/assets/symetric/%D0%A8%D0%B8%D1%84%D1%80_%D0%A6%D0%B5%D0%B7%D0%B0%D1%80%D1%8F.pdf',
+        );
+      case 'КЛЮЧЕВОЙ ШИФР':
+        return SfPdfViewer.network(
+          'https://github.com/equescodebelike/ciphers/raw/refs/heads/master/assets/symetric/%D0%9A%D0%BB%D1%8E%D1%87%D0%B5%D0%B2%D0%BE%D0%B9_%D1%88%D0%B8%D1%84%D1%80.pdf',
+        );
+      case 'ШИФР ВИЖЕНЕРА':
+        return SfPdfViewer.network(
+          'https://github.com/equescodebelike/ciphers/raw/refs/heads/master/assets/symetric/%D1%88%D0%B8%D1%84%D1%80_%D0%92%D0%B8%D0%B6%D0%B5%D0%BD%D0%B5%D1%80%D0%B0.pdf',
+        );
+      case 'ШИФР ПЛЕЙФЕРА':
+        return SfPdfViewer.network(
+          'https://github.com/equescodebelike/ciphers/raw/refs/heads/master/assets/symetric/%D1%88%D0%B8%D1%84%D1%80_%D0%9F%D0%BB%D0%B5%D0%B9%D1%84%D0%B5%D1%80%D0%B0.pdf',
+        );
+      case 'ШИФР РЕШЕТКИ':
+        return SfPdfViewer.network(
+          'https://github.com/equescodebelike/ciphers/raw/refs/heads/master/assets/symetric/%D1%88%D0%B8%D1%84%D1%80_%D1%80%D0%B5%D1%88%D0%B5%D1%82%D0%BA%D0%B8.pdf',
+        );
+      default:
+        return SfPdfViewer.network(
+          'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+        );
+    }
   }
 }
