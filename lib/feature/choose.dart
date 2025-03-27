@@ -1,3 +1,4 @@
+import 'package:cipher/feature/code.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'realization.dart';
@@ -61,6 +62,7 @@ class _ChooseState extends State<Choose> {
                       builder: (context) {
                         return Scaffold(
                           appBar: AppBar(
+                            centerTitle: true,
                             title: Text(
                               widget.title,
                             ),
@@ -76,7 +78,15 @@ class _ChooseState extends State<Choose> {
                     ),
                   );
                 }
-                if (index == 2) {}
+                if (index == 2) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Code(
+                        title: widget.title,
+                      ),
+                    ),
+                  );
+                }
               },
               leading: Icon(Icons.lock, color: Colors.black),
               title: Text(ciphers[index]),

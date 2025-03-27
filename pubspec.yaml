@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons:
   url_launcher:
   syncfusion_flutter_pdfviewer: ^28.2.6
+  universal_code_viewer: ^1.0.1+3
 
 
 dev_dependencies:
