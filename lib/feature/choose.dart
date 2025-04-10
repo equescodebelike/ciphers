@@ -125,7 +125,7 @@ class _ChooseState extends State<Choose> {
         );
       case 'ШИФР ЭЛЬ-ГАМАЛЯ':
         return SfPdfViewer.network(
-          'https://raw.githubusercontent.com/equescodebelike/ciphers/b2b2aca1cc004dea71c549e88284ecdb128882c2/assets/assymetric/%D1%88%D0%B8%D1%84%D1%80%20%D1%8D%D0%BB%D1%8C-%D0%93%D0%B0%D0%BC%D0%B0%D0%BB%D1%8F.pdf',
+          'https://raw.githubusercontent.com/equescodebelike/ciphers/refs/heads/master/assets/assymetric/%D0%A8%D0%B8%D1%84%D1%80%20%D0%AD%D0%BB%D1%8C-%D0%93%D0%B0%D0%BC%D0%B0%D0%BB%D1%8F%20%D1%81%D0%BA%D0%B0%D0%BD.pdf',
         );
       case 'ШИФР RSA':
         return SfPdfViewer.network(
