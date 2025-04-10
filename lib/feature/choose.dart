@@ -119,6 +119,18 @@ class _ChooseState extends State<Choose> {
         return SfPdfViewer.network(
           'https://github.com/equescodebelike/ciphers/raw/refs/heads/master/assets/symetric/%D1%88%D0%B8%D1%84%D1%80_%D1%80%D0%B5%D1%88%D0%B5%D1%82%D0%BA%D0%B8.pdf',
         );
+      case 'ШИФР ДИФФИ-ХЕЛЛМАНА':
+        return SfPdfViewer.network(
+          'https://raw.githubusercontent.com/equescodebelike/ciphers/refs/heads/master/assets/assymetric/%D0%A8%D0%B8%D1%84%D1%80%20%D0%94%D0%B8%D1%84%D1%84%D0%B8-%D0%A5%D0%B5%D0%BB%D0%BB%D0%BC%D0%B0%D0%BD%D0%B0.pdf',
+        );
+      case 'ШИФР ЭЛЬ-ГАМАЛЯ':
+        return SfPdfViewer.network(
+          'https://raw.githubusercontent.com/equescodebelike/ciphers/refs/heads/master/assets/assymetric/%D0%A8%D0%B8%D1%84%D1%80%20%D0%AD%D0%BB%D1%8C-%D0%93%D0%B0%D0%BC%D0%B0%D0%BB%D1%8F%20%D1%81%D0%BA%D0%B0%D0%BD.pdf',
+        );
+      case 'ШИФР RSA':
+        return SfPdfViewer.network(
+          'https://raw.githubusercontent.com/equescodebelike/ciphers/b2b2aca1cc004dea71c549e88284ecdb128882c2/assets/assymetric/%D1%88%D0%B8%D1%84%D1%80_RSA.pdf',
+        );
       default:
         return SfPdfViewer.network(
           'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
