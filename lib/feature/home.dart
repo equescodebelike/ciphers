@@ -11,8 +11,9 @@ final symmetricCiphers = [
 ];
 
 final assymetricCiphers = [
-  'ДИФФИ-ХЕЛЛМАНА',
-  'RSA',
+  'ШИФР ДИФФИ-ХЕЛЛМАНА',
+  'ШИФР RSA',
+  'ШИФР ЭЛЬ-ГАМАЛЯ'
 ];
 
 class Home extends StatefulWidget {

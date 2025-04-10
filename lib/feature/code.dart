@@ -65,6 +65,12 @@ class Code extends StatelessWidget {
         return codeExamplesPlayfair;
       case 'ШИФР РЕШЕТКИ':
         return codeExamplesRailFence;
+      case 'ШИФР RSA':
+        return codeExamplesRSA;
+      case 'ШИФР ЭЛЬ-ГАМАЛЯ':
+        return codeExamplesElGamal;
+      case 'ШИФР ДИФФИ-ХЕЛЛМАНА':
+        return codeExamplesDiffieHellman;
       default:
         return codeExamplesCeaser;
     }

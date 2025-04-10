@@ -1,3 +1,358 @@
+final Map<String, String> codeExamplesRSA = {
+  'Python': '''import math
+
+def generate_keys(p, q):
+    n = p * q
+    phi = (p - 1) * (q - 1)
+    
+    # Выбираем e (обычно 65537)
+    e = 65537
+    while math.gcd(e, phi) != 1:
+        e += 1
+    
+    # Находим d (обратное к e mod phi)
+    d = pow(e, -1, phi)
+    
+    return (e, n), (d, n)
+
+def encrypt(m, public_key):
+    e, n = public_key
+    return pow(m, e, n)
+
+def decrypt(c, private_key):
+    d, n = private_key
+    return pow(c, d, n)
+
+# Пример
+p, q = 61, 53  # Простые числа
+public_key, private_key = generate_keys(p, q)
+
+message = 42
+encrypted = encrypt(message, public_key)
+decrypted = decrypt(encrypted, private_key)
+
+print(f"Original: {message}")
+print(f"Encrypted: {encrypted}")
+print(f"Decrypted: {decrypted}")''',
+'Java': '''import java.math.BigInteger;
+import java.security.SecureRandom;
+
+public class RSA {
+    private BigInteger n, e, d;
+
+    public RSA(int bitLength) {
+        SecureRandom rnd = new SecureRandom();
+        BigInteger p = BigInteger.probablePrime(bitLength, rnd);
+        BigInteger q = BigInteger.probablePrime(bitLength, rnd);
+        
+        n = p.multiply(q);
+        BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
+        
+        e = BigInteger.valueOf(65537);
+        while (e.gcd(phi).compareTo(BigInteger.ONE) != 0) {
+            e = e.add(BigInteger.ONE);
+        }
+        
+        d = e.modInverse(phi);
+    }
+
+    public BigInteger encrypt(BigInteger message) {
+        return message.modPow(e, n);
+    }
+
+    public BigInteger decrypt(BigInteger ciphertext) {
+        return ciphertext.modPow(d, n);
+    }
+
+    public static void main(String[] args) {
+        RSA rsa = new RSA(1024);
+        BigInteger message = new BigInteger("42");
+        
+        BigInteger encrypted = rsa.encrypt(message);
+        BigInteger decrypted = rsa.decrypt(encrypted);
+        
+        System.out.println("Original: " + message);
+        System.out.println("Encrypted: " + encrypted);
+        System.out.println("Decrypted: " + decrypted);
+    }
+}''',
+'C#': '''using System;
+using System.Numerics;
+
+class RSA
+{
+    private BigInteger n, e, d;
+
+    public RSA(int bitLength)
+    {
+        Random rnd = new Random();
+        BigInteger p = BigInteger.ProbablePrime(bitLength, rnd);
+        BigInteger q = BigInteger.ProbablePrime(bitLength, rnd);
+        
+        n = p * q;
+        BigInteger phi = (p - 1) * (q - 1);
+        
+        e = 65537;
+        while (BigInteger.GreatestCommonDivisor(e, phi) != 1)
+        {
+            e++;
+        }
+        
+        d = ModInverse(e, phi);
+    }
+
+    public BigInteger Encrypt(BigInteger message)
+    {
+        return BigInteger.ModPow(message, e, n);
+    }
+
+    public BigInteger Decrypt(BigInteger ciphertext)
+    {
+        return BigInteger.ModPow(ciphertext, d, n);
+    }
+
+    private BigInteger ModInverse(BigInteger a, BigInteger m)
+    {
+        BigInteger x, y;
+        BigInteger g = ExtendedGcd(a, m, out x, out y);
+        if (g != 1)
+            throw new Exception("Обратного элемента не существует");
+        return (x % m + m) % m;
+    }
+
+    private BigInteger ExtendedGcd(BigInteger a, BigInteger b, out BigInteger x, out BigInteger y)
+    {
+        if (b == 0)
+        {
+            x = 1;
+            y = 0;
+            return a;
+        }
+        BigInteger x1, y1;
+        BigInteger gcd = ExtendedGcd(b, a % b, out x1, out y1);
+        x = y1;
+        y = x1 - (a / b) * y1;
+        return gcd;
+    }
+
+    static void Main()
+    {
+        RSA rsa = new RSA(1024);
+        BigInteger message = new BigInteger(42);
+        
+        BigInteger encrypted = rsa.Encrypt(message);
+        BigInteger decrypted = rsa.Decrypt(encrypted);
+        
+        Console.WriteLine("Original: {message}");
+        Console.WriteLine("Encrypted: {encrypted}");
+        Console.WriteLine("Decrypted: {decrypted}");
+    }
+}''',
+};
+final Map<String, String> codeExamplesElGamal = {
+  'Python': '''import random
+from sympy import isprime, primitive_root
+
+def generate_keys(p=None, g=None):
+    if not p or not isprime(p):
+        p = 997  # Простое число (можно генерировать динамически)
+    if not g:
+        g = primitive_root(p)
+    x = random.randint(2, p-2)  # Секретный ключ
+    y = pow(g, x, p)            # Публичный ключ
+    return (p, g, y), x
+
+def encrypt(m, p, g, y):
+    k = random.randint(2, p-2)
+    a = pow(g, k, p)
+    b = (m * pow(y, k, p)) % p
+    return (a, b)
+
+def decrypt(a, b, p, x):
+    s = pow(a, x, p)
+    m = (b * pow(s, p-2, p)) % p  # s^(p-2) ≡ s^(-1) mod p
+    return m
+
+# Пример использования:
+public, private = generate_keys()
+m = 123
+a, b = encrypt(m, *public)
+decrypted = decrypt(a, b, public[0], private)
+print(f"Original: {m}, Decrypted: {decrypted}")''',
+  'Java': '''import java.math.BigInteger;
+import java.security.SecureRandom;
+
+public class ElGamal {
+    private static BigInteger p = new BigInteger("997"); // Простое число
+    private static BigInteger g = new BigInteger("5");   // Генератор
+
+    public static BigInteger[] generateKeys() {
+        SecureRandom random = new SecureRandom();
+        BigInteger x = new BigInteger(p.bitLength() - 2, random); // Секретный ключ
+        BigInteger y = g.modPow(x, p);                           // Публичный ключ
+        return new BigInteger[]{p, g, y, x};
+    }
+
+    public static BigInteger[] encrypt(BigInteger m, BigInteger p, BigInteger g, BigInteger y) {
+        SecureRandom random = new SecureRandom();
+        BigInteger k = new BigInteger(p.bitLength() - 2, random);
+        BigInteger a = g.modPow(k, p);
+        BigInteger b = m.multiply(y.modPow(k, p)).mod(p);
+        return new BigInteger[]{a, b};
+    }
+
+    public static BigInteger decrypt(BigInteger a, BigInteger b, BigInteger p, BigInteger x) {
+        BigInteger s = a.modPow(x, p);
+        BigInteger m = b.multiply(s.modInverse(p)).mod(p);
+        return m;
+    }
+
+    public static void main(String[] args) {
+        BigInteger[] keys = generateKeys();
+        BigInteger m = new BigInteger("123");
+        BigInteger[] cipher = encrypt(m, keys[0], keys[1], keys[2]);
+        BigInteger decrypted = decrypt(cipher[0], cipher[1], keys[0], keys[3]);
+        System.out.println("Original: " + m + ", Decrypted: " + decrypted);
+    }
+}''',
+'C#': '''using System;
+using System.Numerics;
+
+class ElGamal {
+    static Random random = new Random();
+
+    static (BigInteger p, BigInteger g, BigInteger y, BigInteger x) GenerateKeys() {
+        BigInteger p = 997; // Простое число
+        BigInteger g = 5;   // Генератор
+        BigInteger x = new BigInteger(random.Next(2, (int)p - 1)); // Секретный ключ
+        BigInteger y = BigInteger.ModPow(g, x, p);                // Публичный ключ
+        return (p, g, y, x);
+    }
+
+    static (BigInteger a, BigInteger b) Encrypt(BigInteger m, BigInteger p, BigInteger g, BigInteger y) {
+        BigInteger k = new BigInteger(random.Next(2, (int)p - 1));
+        BigInteger a = BigInteger.ModPow(g, k, p);
+        BigInteger b = (m * BigInteger.ModPow(y, k, p)) % p;
+        return (a, b);
+    }
+
+    static BigInteger Decrypt(BigInteger a, BigInteger b, BigInteger p, BigInteger x) {
+        BigInteger s = BigInteger.ModPow(a, x, p);
+        BigInteger m = (b * BigInteger.ModPow(s, p - 2, p)) % p;
+        return m;
+    }
+
+    static void Main() {
+        var (p, g, y, x) = GenerateKeys();
+        BigInteger m = 123;
+        var (a, b) = Encrypt(m, p, g, y);
+        BigInteger decrypted = Decrypt(a, b, p, x);
+        Console.WriteLine("Original: {m}, Decrypted: {decrypted}");
+    }
+}''',
+};
+final Map<String, String> codeExamplesDiffieHellman = {
+  'Python': '''import random
+
+def mod_exp(base, exponent, modulus):
+    if modulus == 1:
+        return 0
+    result = 1
+    base = base % modulus
+    while exponent > 0:
+        if exponent % 2 == 1:
+            result = (result * base) % modulus
+        exponent = exponent >> 1
+        base = (base * base) % modulus
+    return result
+
+# Общие параметры
+p = 23
+g = 5
+
+# Секретные ключи
+secret1 = random.randint(1, p-1)
+secret2 = random.randint(1, p-1)
+
+# Открытые ключи
+public1 = mod_exp(g, secret1, p)
+public2 = mod_exp(g, secret2, p)
+
+# Общий секрет
+shared1 = mod_exp(public2, secret1, p)
+shared2 = mod_exp(public1, secret2, p)
+
+print(f"Сторона 1: секрет = {secret1}, открытый ключ = {public1}")
+print(f"Сторона 2: секрет = {secret2}, открытый ключ = {public2}")
+print(f"Общий секрет у стороны 1: {shared1}")
+print(f"Общий секрет у стороны 2: {shared2}")
+print(f"Совпадают ли ключи? {shared1 == shared2}")''',
+  'Java': '''import java.math.BigInteger;
+import java.security.SecureRandom;
+
+public class DiffieHellman {
+    public static void main(String[] args) {
+        // Общие параметры
+        BigInteger p = BigInteger.valueOf(23);
+        BigInteger g = BigInteger.valueOf(5);
+
+        // Секретные ключи
+        SecureRandom random = new SecureRandom();
+        BigInteger secret1 = new BigInteger(p.bitLength() - 1, random);
+        BigInteger secret2 = new BigInteger(p.bitLength() - 1, random);
+
+        // Открытые ключи
+        BigInteger public1 = g.modPow(secret1, p);
+        BigInteger public2 = g.modPow(secret2, p);
+
+        // Общий секрет
+        BigInteger shared1 = public2.modPow(secret1, p);
+        BigInteger shared2 = public1.modPow(secret2, p);
+
+        System.out.println("Сторона 1: секрет = " + secret1 + ", открытый ключ = " + public1);
+        System.out.println("Сторона 2: секрет = " + secret2 + ", открытый ключ = " + public2);
+        System.out.println("Общий секрет у стороны 1: " + shared1);
+        System.out.println("Общий секрет у стороны 2: " + shared2);
+        System.out.println("Совпадают ли ключи? " + shared1.equals(shared2));
+    }
+}''',
+  'C#': '''using System;
+using System.Numerics;
+
+class DiffieHellman
+{
+    static BigInteger ModExp(BigInteger baseNum, BigInteger exponent, BigInteger modulus)
+    {
+        return BigInteger.ModPow(baseNum, exponent, modulus);
+    }
+
+    static void Main()
+    {
+        // Общие параметры
+        BigInteger p = 23;
+        BigInteger g = 5;
+
+        // Секретные ключи
+        Random random = new Random();
+        BigInteger secret1 = new BigInteger(random.Next(1, (int)p - 1));
+        BigInteger secret2 = new BigInteger(random.Next(1, (int)p - 1));
+
+        // Открытые ключи
+        BigInteger public1 = ModExp(g, secret1, p);
+        BigInteger public2 = ModExp(g, secret2, p);
+
+        // Общий секрет
+        BigInteger shared1 = ModExp(public2, secret1, p);
+        BigInteger shared2 = ModExp(public1, secret2, p);
+
+        Console.WriteLine("Сторона 1: секрет = {secret1}, открытый ключ = {public1}");
+        Console.WriteLine("Сторона 2: секрет = {secret2}, открытый ключ = {public2}");
+        Console.WriteLine("Общий секрет у стороны 1: {shared1}");
+        Console.WriteLine("Общий секрет у стороны 2: {shared2}");
+        Console.WriteLine("Совпадают ли ключи? {shared1 == shared2}");
+    }
+}''',
+};
 final Map<String, String> codeExamplesCeaser = {
   'Python': '''
 def caesar_cipher(text, shift):

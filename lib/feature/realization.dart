@@ -51,38 +51,38 @@ class _RealizationState extends State<Realization> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: CustomTooltip(
-          maxWidth: 800,
-          message: 'Нажмите на название шифра,\nчтобы посмотреть подробную информацию',
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        title: Text(
-                          widget.title,
-                        ),
-                      ),
-                      body: Center(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
-                          child: SfPdfViewer.network(
-                            'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-            child: Text(
-              widget.title,
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
+        title:
+            // CustomTooltip(
+            //   maxWidth: 800,
+            //   message: 'Нажмите на название шифра,\nчтобы посмотреть подробную информацию',
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       Navigator.of(context).push(
+            //         MaterialPageRoute(
+            //           builder: (context) {
+            //             return Scaffold(
+            //               appBar: AppBar(
+            //                 title: Text(
+            //                   widget.title,
+            //                 ),
+            //               ),
+            //               body: Center(
+            //                 child: ConstrainedBox(
+            //                   constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            //                   child: SfPdfViewer.network(
+            //                     'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+            //                   ),
+            //                 ),
+            //               ),
+            //             );
+            //           },
+            //         ),
+            //       );
+            //     },
+            //     child:
+            Text(
+          widget.title,
+          style: TextStyle(color: Colors.black),
         ),
       ),
       body: ListView(
