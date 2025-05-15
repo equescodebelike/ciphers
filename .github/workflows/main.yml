@@ -13,7 +13,7 @@ jobs:
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
       - uses: subosito/flutter-action@v2
-      - run: flutter build web --release
+      - run: flutter build web --release --base-href /ciphers/
       - name: Deploy to GitHub Pages
         run: |
           cd build/web
