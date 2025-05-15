@@ -6,12 +6,20 @@ on:
 jobs:
   build:    
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
       - uses: subosito/flutter-action@v2
       - run: flutter build web --release
-      - run: git config user.name github-actions
-      - run: git config user.email github-actions@github.com
-      - run: git --work-tree build/web add --all
-      - run: git commit -m "Automatic deployment by github-actions"
-      - run: git push https://${{ secrets.DEPLOY_TOKEN }}@github.com/${{ github.repository }}.git HEAD:gh-pages --force
+      - name: Deploy to GitHub Pages
+        run: |
+          cd build/web
+          git init
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Automatic deployment by github-actions"
+          git push https://${{ secrets.DEPLOY_TOKEN }}@github.com/${{ github.repository }}.git HEAD:gh-pages --force
